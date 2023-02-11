@@ -122,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				DF96FE1F2997ABB100C2F28D /* PokedexCore */,
-				DF96FE2B2997ABB200C2F28D /* PokedexCoreTests */,
 				DF96FE042997AB9800C2F28D /* Pokedex */,
 				DF96FE032997AB9800C2F28D /* Products */,
 			);
@@ -160,13 +159,6 @@
 				DF96FE4A2997AE2B00C2F28D /* Networking */,
 			);
 			path = PokedexCore;
-			sourceTree = "<group>";
-		};
-		DF96FE2B2997ABB200C2F28D /* PokedexCoreTests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PokedexCoreTests;
 			sourceTree = "<group>";
 		};
 		DF96FE3C2997ADB200C2F28D /* Shared */ = {
