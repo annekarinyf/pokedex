@@ -7,6 +7,11 @@
 
 import Foundation
 
+public struct PokemonList {
+    public let nextURL: URL?
+    public let items: [PokemonListItem]
+}
+
 public struct PokemonListItem {
     public let url: URL
 }

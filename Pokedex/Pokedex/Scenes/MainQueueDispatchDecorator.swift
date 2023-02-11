@@ -25,8 +25,8 @@ final class MainQueueDispatchDecorator<T> {
 }
 
 extension MainQueueDispatchDecorator: PokemonListLoader where T == PokemonListLoader {
-    func load(completion: @escaping (PokemonListLoader.Result) -> Void) {
-        decoratee.load { [weak self] result in
+    func load(from url: URL, completion: @escaping (PokemonListLoader.Result) -> Void) {
+        decoratee.load(from: url) { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }

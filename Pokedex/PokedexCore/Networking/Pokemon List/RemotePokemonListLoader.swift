@@ -8,12 +8,11 @@
 import Foundation
 
 public protocol PokemonListLoader {
-    typealias Result = Swift.Result<[PokemonListItem], Error>
-    func load(completion: @escaping (PokemonListLoader.Result) -> Void)
+    typealias Result = Swift.Result<PokemonList, Error>
+    func load(from url: URL, completion: @escaping (PokemonListLoader.Result) -> Void)
 }
 
 public final class RemotePokemonListLoader: PokemonListLoader {
-    private let url: URL
     private let client: HTTPClient
 
     public enum Error: Swift.Error {
@@ -21,12 +20,11 @@ public final class RemotePokemonListLoader: PokemonListLoader {
         case invalidData
     }
 
-    public init(client: HTTPClient, url: URL) {
+    public init(client: HTTPClient) {
         self.client = client
-        self.url = url
     }
 
-    public func load(completion: @escaping (PokemonListLoader.Result) -> Void) {
+    public func load(from url: URL, completion: @escaping (PokemonListLoader.Result) -> Void) {
         client.get(from: url) { [weak self] result in
             guard self != nil else {
                 return

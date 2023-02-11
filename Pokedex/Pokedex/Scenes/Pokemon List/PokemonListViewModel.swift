@@ -12,6 +12,7 @@ final class PokemonListViewModel {
     private let loader: PokemonListLoader
     private var detailLoader: PokemonDetailLoader
     private let imageLoader: ImageDataLoader
+    private var url: URL?
     private var cellViewModels = [PokemonListCellViewModel]()
     
     var title: String {
@@ -27,22 +28,29 @@ final class PokemonListViewModel {
     var onPokemonListLoad: (() -> Void)?
     
     init(
+        url: URL,
         loader: PokemonListLoader,
         detailLoader: PokemonDetailLoader,
         imageLoader: ImageDataLoader
     ) {
+        self.url = url
         self.loader = loader
         self.detailLoader = detailLoader
         self.imageLoader = imageLoader
     }
     
     func loadList() {
+        guard let url = url else {
+            return
+        }
         onLoadingStateChange?(true)
-        loader.load { [weak self] result in
+        loader.load(from: url) { [weak self] result in
             self?.onLoadingStateChange?(false)
             switch result {
-            case .success(let pokemonListItems):
-                self?.cellViewModels = pokemonListItems.compactMap { self?.makeListCellViewModel(for: $0) }
+            case .success(let pokemonList):
+                self?.url = pokemonList.nextURL
+                let pokemonItems = pokemonList.items.compactMap { self?.makeListCellViewModel(for: $0) }
+                self?.cellViewModels.append(contentsOf: pokemonItems)
                 self?.onPokemonListLoad?()
             case .failure(let error):
                 self?.onErrorState?(error)

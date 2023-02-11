@@ -124,4 +124,10 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
         }
         coordinator?.openPokemonDetailViewController(with: model)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.pokemonListCount - 1 {
+            viewModel.loadList()
+        }
+    }
 }

@@ -31,14 +31,14 @@ final class MainCoordinator: Coordinator {
             session: URLSession(configuration: .ephemeral)
         )
         let listLoader = RemotePokemonListLoader(
-            client: httpClient,
-            url: url
+            client: httpClient
         )
         let detailLoader = RemotePokemonDetailLoader(
             client: httpClient
         )
         let imageLoader = ImageLoader(client: httpClient)
         let viewModel = PokemonListViewModel(
+            url: url,
             loader: MainQueueDispatchDecorator(decoratee: listLoader),
             detailLoader: MainQueueDispatchDecorator(decoratee: detailLoader),
             imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)
