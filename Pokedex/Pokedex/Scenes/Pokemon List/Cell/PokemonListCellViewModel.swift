@@ -69,38 +69,3 @@ extension PokemonDetail {
         )
     }
 }
-
-extension PokemonType {
-    var color: UIColor {
-        switch self {
-        case .grass:
-            return .systemGreen
-        case .fire:
-            return .systemRed
-        case .water:
-            return .systemBlue
-        case .eletric:
-            return .systemYellow
-        case .poison:
-            return .systemPurple
-        default:
-            return .systemGray
-        }
-    }
-}
-
-extension Float {
-    func toMetersFormatted() -> String {
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        let measure = Measurement(value: Double(Int(self)), unit: UnitLength.meters)
-        return formatter.string(from: measure)
-    }
-    
-    func toKilogramsFormatted() -> String {
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        let measure = Measurement(value: Double(Int(self)), unit: UnitMass.kilograms)
-        return formatter.string(from: measure)
-    }
-}
