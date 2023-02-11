@@ -36,6 +36,18 @@ final class PokemonListViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        return label
+    }()
+    
     private let viewModel: PokemonListViewModel
     weak var coordinator: Coordinator?
     
@@ -68,11 +80,21 @@ final class PokemonListViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        
+        collectionView.addSubview(refreshControl)
+    }
+    
+    @objc private func refresh() {
+        viewModel.loadList()
     }
     
     private func setupBinding() {
         viewModel.onLoadingStateChange = { [weak self] isLoading in
-            
+            if isLoading {
+                self?.refreshControl.beginRefreshing()
+            } else {
+                self?.refreshControl.endRefreshing()
+            }
         }
         
         viewModel.onPokemonListLoad = { [weak self] in
@@ -80,7 +102,7 @@ final class PokemonListViewController: UIViewController {
         }
         
         viewModel.onErrorState = { [weak self] error in
-            
+            self?.errorLabel.text = error.localizedDescription
         }
     }
 }

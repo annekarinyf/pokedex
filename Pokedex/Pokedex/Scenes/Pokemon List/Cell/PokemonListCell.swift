@@ -32,6 +32,8 @@ final class PokemonListCell: UICollectionViewCell {
         return label
     }()
     
+    private lazy var activityIndicator = UIActivityIndicatorView(style: .medium)
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupSubviews()
@@ -61,11 +63,20 @@ final class PokemonListCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
     private func setupBinding() {
         viewModel?.onLoadingStateChange = { [weak self] isLoading in
-            
+            if isLoading {
+                self?.activityIndicator.startAnimating()
+            } else {
+                self?.activityIndicator.stopAnimating()
+            }
         }
         
         viewModel?.onPokemonDetailLoad = { [weak self] presentableModel in
@@ -78,7 +89,7 @@ final class PokemonListCell: UICollectionViewCell {
         }
         
         viewModel?.onErrorState = { [weak self] error in
-            
+            self?.title.text = error.localizedDescription
         }
     }
 }
