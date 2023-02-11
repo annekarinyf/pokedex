@@ -8,22 +8,22 @@
 import Foundation
 
 public struct PokemonDetail {
-    let id: Int
-    let name: String
-    let weight: Float
-    let height: Float
-    let types: [PokemonType]
-    let stats: [Stat]
-    let baseExperience: Int
-    let spriteURL: URL
+    public let id: Int
+    public let name: String
+    public let weight: Float
+    public let height: Float
+    public let types: [PokemonType]
+    public let stats: [Stat]
+    public let baseExperience: Int
+    public let spriteURL: URL
     
-    struct Stat {
-        let name: String
-        let baseStat: Int
+    public struct Stat {
+        public let name: String
+        public let baseStat: Int
     }
 }
 
-enum PokemonType: String {
+public enum PokemonType: String {
     case grass
     case fire
     case water

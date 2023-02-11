@@ -7,8 +7,20 @@
 
 import UIKit
 
-final class PokemonListCell: UITableViewCell {
+final class PokemonListCell: UICollectionViewCell {
     private let viewModel: PokemonListCellViewModel
+    
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private lazy var title: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title1)
+        return label
+    }()
     
     init(viewModel: PokemonListCellViewModel) {
         self.viewModel = viewModel
@@ -17,5 +29,9 @@ final class PokemonListCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setup() {
+        
     }
 }
