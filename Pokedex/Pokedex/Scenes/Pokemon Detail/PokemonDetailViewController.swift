@@ -11,6 +11,44 @@ final class PokemonDetailViewController: UIViewController {
     private let viewModel: PokemonDetailPresentableModel
     weak var coordinator: Coordinator?
     
+    private let scrollView = UIScrollView()
+    
+    private lazy var imageBackgroundView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private lazy var numberLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        return label
+    }()
+    
+    private lazy var heightLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        return label
+    }()
+    
+    private lazy var weightLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        return label
+    }()
+    
+    private lazy var baseStatsLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        label.text = "Base Stats"
+        return label
+    }()
+    
     init(viewModel: PokemonDetailPresentableModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -22,6 +60,70 @@ final class PokemonDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        title = viewModel.name
+        view.backgroundColor = .systemBackground
+        setupSubviews()
+        setupContent()
+    }
+    
+    private func setupSubviews() {
+        view.addSubview(scrollView)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        let mainStackView = UIStackView()
+        mainStackView.axis = .vertical
+        mainStackView.spacing = 16
+        mainStackView.distribution = .fill
+        mainStackView.alignment = .center
+        
+        scrollView.addSubview(mainStackView)
+        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        mainStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        mainStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        mainStackView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        
+        imageBackgroundView.addSubview(imageView)
+        mainStackView.addArrangedSubview(imageBackgroundView)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.centerXAnchor.constraint(equalTo: imageBackgroundView.centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: imageBackgroundView.centerYAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        imageBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        imageBackgroundView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        imageBackgroundView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor).isActive = true
+        imageBackgroundView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor).isActive = true
+        
+        mainStackView.addArrangedSubview(numberLabel)
+        
+    }
+    
+    private func setupContent() {
+        imageBackgroundView.backgroundColor = viewModel.types.first?.color.withAlphaComponent(0.25)
+        imageView.image = viewModel.image
+        numberLabel.text = viewModel.number
+        
+    }
+    
+    private func makeLabel(with color: UIColor) -> UILabel {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24)
+        label.backgroundColor = color
+        return label
+    }
+    
+    private func makeProgressView(with color: UIColor) -> UIProgressView {
+        let progressView = UIProgressView(progressViewStyle: .bar)
+        progressView.backgroundColor = color
+        return progressView
     }
 }

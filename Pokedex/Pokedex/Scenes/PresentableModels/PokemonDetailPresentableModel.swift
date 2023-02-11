@@ -15,4 +15,5 @@ struct PokemonDetailPresentableModel {
     let stats: [(stat: String, value: Int)]
     let height: String
     let weight: String
+    var image: UIImage?
 }

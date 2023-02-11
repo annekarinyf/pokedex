@@ -49,6 +49,7 @@ final class PokemonListCellViewModel {
         imageLoader.loadImageData(from: url) { [weak self] result in
             let data = try? result.get()
             let image = data.map(UIImage.init) ?? nil
+            self?.presentableModel?.image = image
             self?.onImageLoad?(image)
         }
     }
