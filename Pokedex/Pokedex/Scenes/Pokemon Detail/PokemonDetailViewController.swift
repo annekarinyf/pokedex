@@ -32,13 +32,13 @@ final class PokemonDetailViewController: UIViewController {
     
     private lazy var heightLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 16)
         return label
     }()
     
     private lazy var weightLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 16)
         return label
     }()
     
@@ -63,7 +63,6 @@ final class PokemonDetailViewController: UIViewController {
         title = viewModel.name
         view.backgroundColor = .systemBackground
         setupSubviews()
-        setupContent()
     }
     
     private func setupSubviews() {
@@ -89,6 +88,9 @@ final class PokemonDetailViewController: UIViewController {
         mainStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         mainStackView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         
+        imageBackgroundView.backgroundColor = viewModel.types.first?.color.withAlphaComponent(0.25)
+        imageView.image = viewModel.image
+        
         imageBackgroundView.addSubview(imageView)
         mainStackView.addArrangedSubview(imageBackgroundView)
         
@@ -103,21 +105,44 @@ final class PokemonDetailViewController: UIViewController {
         imageBackgroundView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor).isActive = true
         imageBackgroundView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor).isActive = true
         
+        numberLabel.text = viewModel.number
         mainStackView.addArrangedSubview(numberLabel)
         
-    }
-    
-    private func setupContent() {
-        imageBackgroundView.backgroundColor = viewModel.types.first?.color.withAlphaComponent(0.25)
-        imageView.image = viewModel.image
-        numberLabel.text = viewModel.number
+        let labels = viewModel.types.map { makeLabel($0.type, with: $0.color ) }
+        let typesStackView = UIStackView(arrangedSubviews: labels)
+        typesStackView.axis = .horizontal
+        typesStackView.spacing = 8
+        mainStackView.addArrangedSubview(typesStackView)
         
+        let weight = UILabel(frame: .zero)
+        weight.text = "WEIGHT"
+        weight.font = .systemFont(ofSize: 16)
+        weightLabel.text = viewModel.weight
+        let weightStackView = UIStackView(arrangedSubviews: [weightLabel, weight])
+        weightStackView.axis = .vertical
+        weightStackView.spacing = 8
+        weightStackView.alignment = .center
+        
+        let height = UILabel(frame: .zero)
+        height.text = "HEIGHT"
+        height.font = .systemFont(ofSize: 16)
+        heightLabel.text = viewModel.height
+        let heightStackView = UIStackView(arrangedSubviews: [heightLabel, height])
+        heightStackView.axis = .vertical
+        heightStackView.spacing = 8
+        heightStackView.alignment = .center
+        
+        let sizeInfoStackView = UIStackView(arrangedSubviews: [weightStackView, heightStackView])
+        sizeInfoStackView.spacing = 24
+        mainStackView.addArrangedSubview(sizeInfoStackView)
     }
     
-    private func makeLabel(with color: UIColor) -> UILabel {
+    private func makeLabel(_ text: String, with color: UIColor) -> UILabel {
         let label = UILabel()
         label.font = .systemFont(ofSize: 24)
-        label.backgroundColor = color
+        label.text = text
+        label.tintColor = .label
+        label.backgroundColor = color.withAlphaComponent(0.1)
         return label
     }
     
