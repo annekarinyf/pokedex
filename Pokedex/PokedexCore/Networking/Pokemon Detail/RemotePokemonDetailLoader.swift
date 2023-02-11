@@ -14,6 +14,7 @@ public protocol PokemonDetailLoader {
 
 public final class RemotePokemonDetailLoader: PokemonDetailLoader {
     private let client: HTTPClient
+    private let cache = Cache<URL, PokemonDetail>()
 
     public enum Error: Swift.Error {
         case connectivity
@@ -29,10 +30,16 @@ public final class RemotePokemonDetailLoader: PokemonDetailLoader {
             guard self != nil else {
                 return
             }
+        
+            if let cached = self?.cache[url] {
+                return completion(.success(cached))
+            }
+            
             switch result {
             case .success((let data, let response)):
                 do {
                     let detail = try RemotePokemonDetailMapper.map(data, from: response)
+                    self?.cache[url] = detail
                     completion(.success(detail))
                 } catch {
                     completion(.failure(Error.invalidData))
