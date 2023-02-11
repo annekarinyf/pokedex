@@ -15,6 +15,7 @@ extension PokemonDetail {
             number: "#\(id)",
             types: types.map { (type: $0.rawValue, color: $0.color) },
             stats: stats.map { (stat: $0.name, value: $0.baseStat) },
+            baseExperience: baseExperience,
             height: height.toMetersFormatted(),
             weight: weight.toKilogramsFormatted()
         )

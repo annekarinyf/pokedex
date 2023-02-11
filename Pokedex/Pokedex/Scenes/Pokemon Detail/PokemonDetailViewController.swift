@@ -132,7 +132,9 @@ final class PokemonDetailViewController: UIViewController {
         let baseStats = UILabel(frame: .zero)
         baseStats.text = "Base Stats"
         baseStats.font = .systemFont(ofSize: 24)
-        let stats = viewModel.stats.map { makeProgressContentView(text: $0.stat, value: Float($0.value) / 100.0) }
+        var stats = viewModel.stats.map { makeProgressContentView(text: $0.stat, value: $0.value, maxValue: 100) }
+        let baseExpStat = makeProgressContentView(text: "exp", value: viewModel.baseExperience, maxValue: 1000)
+        stats.append(baseExpStat)
         let statsStackView = UIStackView(arrangedSubviews: stats)
         statsStackView.axis = .vertical
         statsStackView.spacing = 8
@@ -153,14 +155,14 @@ final class PokemonDetailViewController: UIViewController {
         return label
     }
     
-    private func makeProgressContentView(text: String, value: Float) -> UIStackView {
+    private func makeProgressContentView(text: String, value: Int, maxValue: Int) -> UIStackView {
         let label = UILabel(frame: .zero)
-        label.text = text.uppercased()
+        label.text = "\(text.uppercased()) (\(value)/\(maxValue))"
         label.font = .systemFont(ofSize: 12)
         
         let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
-        progressView.progress = value
+        progressView.progress = Float(value) / Float(maxValue)
         
         let stackView = UIStackView(arrangedSubviews: [label, progressView])
         stackView.axis = .horizontal

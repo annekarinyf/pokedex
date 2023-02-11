@@ -29,5 +29,18 @@ public enum PokemonType: String {
     case water
     case eletric
     case poison
-    case other
+    case normal
+    case ice
+    case fighting
+    case ground
+    case flying
+    case psychic
+    case bug
+    case rock
+    case ghost
+    case dark
+    case dragon
+    case steel
+    case fairy
+    case unknown
 }

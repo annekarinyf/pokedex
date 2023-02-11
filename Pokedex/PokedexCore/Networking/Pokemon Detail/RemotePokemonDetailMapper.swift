@@ -22,7 +22,7 @@ public struct RemotePokemonDetailMapper {
             name: root.name,
             weight: root.weight,
             height: root.height,
-            types: root.types.map { PokemonType(rawValue: $0.type.name ) ?? .other },
+            types: root.types.map { PokemonType(rawValue: $0.type.name ) ?? .unknown },
             stats: root.stats.map { PokemonDetail.Stat(name: $0.stat.name, baseStat: $0.baseStat) } ,
             baseExperience: root.baseExperience,
             spriteURL: root.sprites.frontDefault
