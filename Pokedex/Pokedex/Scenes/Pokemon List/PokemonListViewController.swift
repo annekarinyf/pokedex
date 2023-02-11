@@ -50,16 +50,49 @@ final class PokemonListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = viewModel.title
+        view.backgroundColor = .systemBackground
+        
+        setupSubviews()
+        setupBinding()
+        viewModel.loadList()
+    }
+    
+    private func setupSubviews() {
+        view.addSubview(collectionView)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+    }
+    
+    private func setupBinding() {
+        viewModel.onLoadingStateChange = { [weak self] isLoading in
+            
+        }
+        
+        viewModel.onPokemonListLoad = { [weak self] in
+            self?.collectionView.reloadData()
+        }
+        
+        viewModel.onErrorState = { [weak self] error in
+            
+        }
     }
 }
 
 extension PokemonListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        viewModel.pokemonListCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        let cell: PokemonListCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
+        cell.viewModel = viewModel.getListCellViewModel(at: indexPath)
+        return cell
     }
 }

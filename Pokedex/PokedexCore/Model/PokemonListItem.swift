@@ -8,6 +8,5 @@
 import Foundation
 
 public struct PokemonListItem {
-    let name: String
-    let url: URL
+    public let url: URL
 }

@@ -16,7 +16,7 @@ public struct RemotePokemonListMapper {
             throw RemotePokemonListLoader.Error.invalidData
         }
         
-        return root.results.map { PokemonListItem(name: $0.name, url: $0.url) }
+        return root.results.map { PokemonListItem(url: $0.url) }
     }
 }
 

@@ -8,18 +8,10 @@
 import UIKit
 import PokedexCore
 
-struct PokemonDetailPresentableModel {
-    let name: String
-    let number: String
-    let types: [(type: String, color: UIColor)]
-    let stats: [(stat: String, value: Int)]
-    let height: String
-    let weight: String
-}
-
 final class PokemonListCellViewModel {
     private let loader: PokemonDetailLoader
     private let imageLoader: ImageDataLoader
+    private let url: URL
     
     var onLoadingStateChange: Observer<Bool>?
     var onImageLoad: Observer<UIImage?>?
@@ -28,15 +20,17 @@ final class PokemonListCellViewModel {
     
     init(
         loader: PokemonDetailLoader,
-        imageLoader: ImageDataLoader
+        imageLoader: ImageDataLoader,
+        url: URL
     ) {
         self.loader = loader
         self.imageLoader = imageLoader
+        self.url = url
     }
     
     func loadDetail() {
         onLoadingStateChange?(true)
-        loader.load { [weak self] result in
+        loader.load(from: url) { [weak self] result in
             self?.onLoadingStateChange?(false)
             switch result {
             case .success(let pokemonDetail):
@@ -54,18 +48,5 @@ final class PokemonListCellViewModel {
             let image = data.map(UIImage.init) ?? nil
             self?.onImageLoad?(image)
         }
-    }
-}
-
-extension PokemonDetail {
-    func toPresentableModel() -> PokemonDetailPresentableModel {
-        PokemonDetailPresentableModel(
-            name: name,
-            number: "#\(id)",
-            types: types.map { (type: $0.rawValue, color: $0.color) },
-            stats: stats.map { (stat: $0.name, value: $0.baseStat) },
-            height: height.toMetersFormatted(),
-            weight: weight.toKilogramsFormatted()
-        )
     }
 }

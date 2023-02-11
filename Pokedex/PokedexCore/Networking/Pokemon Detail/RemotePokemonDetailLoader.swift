@@ -9,11 +9,10 @@ import Foundation
 
 public protocol PokemonDetailLoader {
     typealias Result = Swift.Result<PokemonDetail, Error>
-    func load(completion: @escaping (PokemonDetailLoader.Result) -> Void)
+    func load(from url: URL, completion: @escaping (PokemonDetailLoader.Result) -> Void)
 }
 
 public final class RemotePokemonDetailLoader: PokemonDetailLoader {
-    private let url: URL
     private let client: HTTPClient
 
     public enum Error: Swift.Error {
@@ -21,12 +20,11 @@ public final class RemotePokemonDetailLoader: PokemonDetailLoader {
         case invalidData
     }
 
-    public init(client: HTTPClient, url: URL) {
+    public init(client: HTTPClient) {
         self.client = client
-        self.url = url
     }
 
-    public func load(completion: @escaping (PokemonDetailLoader.Result) -> Void) {
+    public func load(from url: URL, completion: @escaping (PokemonDetailLoader.Result) -> Void) {
         client.get(from: url) { [weak self] result in
             guard self != nil else {
                 return

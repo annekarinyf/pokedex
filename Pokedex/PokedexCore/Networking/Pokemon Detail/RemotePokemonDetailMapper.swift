@@ -9,9 +9,10 @@ import Foundation
 
 public struct RemotePokemonDetailMapper {
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> PokemonDetail {
-        guard
-            response.isOK,
-            let root = try? JSONDecoder().decode(Root.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard response.isOK,
+            let root = try? decoder.decode(Root.self, from: data)
         else {
             throw RemotePokemonDetailLoader.Error.invalidData
         }

@@ -8,10 +8,16 @@
 import UIKit
 
 final class PokemonListCell: UICollectionViewCell {
-    private let viewModel: PokemonListCellViewModel
+    var viewModel: PokemonListCellViewModel? {
+        didSet {
+            setupBinding()
+            viewModel?.loadDetail()
+        }
+    }
     
     enum LayoutConstants {
         static let spacing: CGFloat = 12
+        static let fontSize: CGFloat = 20
     }
     
     private lazy var imageView: UIImageView = {
@@ -22,53 +28,56 @@ final class PokemonListCell: UICollectionViewCell {
     
     private lazy var title: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title1)
+        label.font = .systemFont(ofSize: LayoutConstants.fontSize)
         return label
     }()
     
-    init(viewModel: PokemonListCellViewModel) {
-        self.viewModel = viewModel
+    override init(frame: CGRect) {
         super.init(frame: .zero)
         setupSubviews()
-        setupBinding()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setRoundedLayout()
+    }
+    
     private func setupSubviews() {
-        addSubview(imageView)
-        addSubview(title)
+        let stackView = UIStackView(arrangedSubviews: [imageView, title])
+        stackView.spacing = LayoutConstants.spacing
+        stackView.alignment = .center
+        stackView.axis = .vertical
+        
+        addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: topAnchor, constant: LayoutConstants.spacing).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: title.topAnchor, constant: LayoutConstants.spacing).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: LayoutConstants.spacing).isActive = true
-        imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: LayoutConstants.spacing).isActive = true
-        
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: LayoutConstants.spacing).isActive = true
-        title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: LayoutConstants.spacing).isActive = true
-        title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: LayoutConstants.spacing).isActive = true
-        title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: LayoutConstants.spacing).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
     
     private func setupBinding() {
-        viewModel.onLoadingStateChange = { [weak self] isLoading in
+        viewModel?.onLoadingStateChange = { [weak self] isLoading in
             
         }
         
-        viewModel.onPokemonDetailLoad = { [weak self] presentableModel in
+        viewModel?.onPokemonDetailLoad = { [weak self] presentableModel in
             self?.title.text = presentableModel.name
-            self?.contentView.backgroundColor = presentableModel.types.first?.color
+            self?.contentView.backgroundColor = presentableModel.types.first?.color.withAlphaComponent(0.25)
         }
         
-        viewModel.onImageLoad = { [weak self] image in
+        viewModel?.onImageLoad = { [weak self] image in
             self?.imageView.image = image
         }
         
-        viewModel.onErrorState = { [weak self] error in
+        viewModel?.onErrorState = { [weak self] error in
             
         }
     }
