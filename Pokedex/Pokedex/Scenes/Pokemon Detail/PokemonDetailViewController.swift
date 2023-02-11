@@ -8,10 +8,10 @@
 import UIKit
 
 final class PokemonDetailViewController: UIViewController {
-    private let viewModel: PokemonDetailViewModel
+    private let viewModel: PokemonDetailPresentableModel
     weak var coordinator: Coordinator?
     
-    init(viewModel: PokemonDetailViewModel) {
+    init(viewModel: PokemonDetailPresentableModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

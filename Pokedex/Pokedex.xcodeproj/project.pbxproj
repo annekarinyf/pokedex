@@ -146,6 +146,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF936F682998054800C0A447 /* PresentableModels */ = {
+			isa = PBXGroup;
+			children = (
+				DF96FE732997DB5700C2F28D /* PokemonDetailPresentableModel.swift */,
+			);
+			path = PresentableModels;
+			sourceTree = "<group>";
+		};
 		DF96FDF92997AB9800C2F28D = {
 			isa = PBXGroup;
 			children = (
@@ -250,6 +258,7 @@
 			children = (
 				DF96FE592997C91D00C2F28D /* Coordinator.swift */,
 				DF96FE772997E29800C2F28D /* MainQueueDispatchDecorator.swift */,
+				DF936F682998054800C0A447 /* PresentableModels */,
 				DF96FE572997C90200C2F28D /* Pokemon List */,
 				DF96FE582997C90B00C2F28D /* Pokemon Detail */,
 				DF96FE682997CD2600C2F28D /* Shared */,
@@ -263,7 +272,6 @@
 				DF96FE5F2997CA5100C2F28D /* Cell */,
 				DF96FE5B2997CA2200C2F28D /* PokemonListViewController.swift */,
 				DF96FE5D2997CA4200C2F28D /* PokemonListViewModel.swift */,
-				DF96FE732997DB5700C2F28D /* PokemonDetailPresentableModel.swift */,
 			);
 			path = "Pokemon List";
 			sourceTree = "<group>";

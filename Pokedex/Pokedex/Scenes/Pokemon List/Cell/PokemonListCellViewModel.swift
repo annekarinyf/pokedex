@@ -17,6 +17,7 @@ final class PokemonListCellViewModel {
     var onImageLoad: Observer<UIImage?>?
     var onErrorState: Observer<Error>?
     var onPokemonDetailLoad: Observer<PokemonDetailPresentableModel>?
+    var presentableModel: PokemonDetailPresentableModel?
     
     init(
         loader: PokemonDetailLoader,
@@ -34,7 +35,9 @@ final class PokemonListCellViewModel {
             self?.onLoadingStateChange?(false)
             switch result {
             case .success(let pokemonDetail):
-                self?.onPokemonDetailLoad?(pokemonDetail.toPresentableModel())
+                let model = pokemonDetail.toPresentableModel()
+                self?.presentableModel = model
+                self?.onPokemonDetailLoad?(model)
                 self?.loadImage(with: pokemonDetail.spriteURL)
             case .failure(let error):
                 self?.onErrorState?(error)

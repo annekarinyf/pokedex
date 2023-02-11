@@ -49,7 +49,7 @@ final class PokemonListViewController: UIViewController {
     }()
     
     private let viewModel: PokemonListViewModel
-    weak var coordinator: Coordinator?
+    var coordinator: PokemonListCoordinator?
     
     init(viewModel: PokemonListViewModel) {
         self.viewModel = viewModel
@@ -116,5 +116,12 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
         let cell: PokemonListCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
         cell.viewModel = viewModel.getListCellViewModel(at: indexPath)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = viewModel.getPresentableModel(at: indexPath) else {
+            return
+        }
+        coordinator?.openPokemonDetailViewController(with: model)
     }
 }

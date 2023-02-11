@@ -14,6 +14,10 @@ protocol Coordinator: AnyObject {
     func start()
 }
 
+protocol PokemonListCoordinator: AnyObject {
+    func openPokemonDetailViewController(with model: PokemonDetailPresentableModel)
+}
+
 final class MainCoordinator: Coordinator {
     var navigationController: UINavigationController
     
@@ -40,6 +44,14 @@ final class MainCoordinator: Coordinator {
             imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)
         )
         let viewController = PokemonListViewController(viewModel: viewModel)
+        viewController.coordinator = self
         navigationController.pushViewController(viewController, animated: false)
+    }
+}
+
+extension MainCoordinator: PokemonListCoordinator {
+    func openPokemonDetailViewController(with model: PokemonDetailPresentableModel) {
+        let viewController = PokemonDetailViewController(viewModel: model)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
