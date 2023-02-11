@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PokemonItem {
+public struct PokemonListItem {
     let name: String
     let url: URL
 }

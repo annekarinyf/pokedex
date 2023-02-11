@@ -1,5 +1,5 @@
 //
-//  RemotePokemonListLoader.swift
+//  RemotePokemonDetailLoader.swift
 //  PokedexCore
 //
 //  Created by Anne Kariny Silva Freitas on 11/02/23.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-public protocol PokemonListLoader {
-    typealias Result = Swift.Result<[PokemonListItem], Error>
-    func load(completion: @escaping (PokemonListLoader.Result) -> Void)
+public protocol PokemonDetailLoader {
+    typealias Result = Swift.Result<PokemonDetail, Error>
+    func load(completion: @escaping (PokemonDetailLoader.Result) -> Void)
 }
 
-public final class RemotePokemonListLoader: PokemonListLoader {
+public final class RemotePokemonDetailLoader: PokemonDetailLoader {
     private let url: URL
     private let client: HTTPClient
 
@@ -26,7 +26,7 @@ public final class RemotePokemonListLoader: PokemonListLoader {
         self.url = url
     }
 
-    public func load(completion: @escaping (PokemonListLoader.Result) -> Void) {
+    public func load(completion: @escaping (PokemonDetailLoader.Result) -> Void) {
         client.get(from: url) { [weak self] result in
             guard self != nil else {
                 return
@@ -34,8 +34,8 @@ public final class RemotePokemonListLoader: PokemonListLoader {
             switch result {
             case .success((let data, let response)):
                 do {
-                    let list = try RemotePokemonListMapper.map(data, from: response)
-                    completion(.success(list))
+                    let detail = try RemotePokemonDetailMapper.map(data, from: response)
+                    completion(.success(detail))
                 } catch {
                     completion(.failure(Error.invalidData))
                 }

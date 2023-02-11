@@ -1,6 +1,6 @@
 //
 //  RemotePokemonListMapper.swift
-//  Pokedex
+//  PokedexCore
 //
 //  Created by Anne Kariny Silva Freitas on 11/02/23.
 //
@@ -8,7 +8,7 @@
 import Foundation
 
 public struct RemotePokemonListMapper {
-    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [PokemonItem] {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [PokemonListItem] {
         guard
             response.isOK,
             let root = try? JSONDecoder().decode(Root.self, from: data)
@@ -16,7 +16,7 @@ public struct RemotePokemonListMapper {
             throw RemotePokemonListLoader.Error.invalidData
         }
         
-        return root.results.map { PokemonItem(name: $0.name, url: $0.url) }
+        return root.results.map { PokemonListItem(name: $0.name, url: $0.url) }
     }
 }
 

@@ -1,6 +1,6 @@
 //
 //  HTTPClient.swift
-//  Pokedex
+//  PokedexCore
 //
 //  Created by Anne Kariny Silva Freitas on 11/02/23.
 //
