@@ -42,13 +42,6 @@ final class PokemonDetailViewController: UIViewController {
         return label
     }()
     
-    private lazy var baseStatsLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 24)
-        label.text = "Base Stats"
-        return label
-    }()
-    
     init(viewModel: PokemonDetailPresentableModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -97,11 +90,11 @@ final class PokemonDetailViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.centerXAnchor.constraint(equalTo: imageBackgroundView.centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: imageBackgroundView.centerYAnchor).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         
         imageBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        imageBackgroundView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        imageBackgroundView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         imageBackgroundView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor).isActive = true
         imageBackgroundView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor).isActive = true
         
@@ -135,6 +128,20 @@ final class PokemonDetailViewController: UIViewController {
         let sizeInfoStackView = UIStackView(arrangedSubviews: [weightStackView, heightStackView])
         sizeInfoStackView.spacing = 24
         mainStackView.addArrangedSubview(sizeInfoStackView)
+        
+        let baseStats = UILabel(frame: .zero)
+        baseStats.text = "Base Stats"
+        baseStats.font = .systemFont(ofSize: 24)
+        let stats = viewModel.stats.map { makeProgressContentView(text: $0.stat, value: Float($0.value) / 100.0) }
+        let statsStackView = UIStackView(arrangedSubviews: stats)
+        statsStackView.axis = .vertical
+        statsStackView.spacing = 8
+        statsStackView.distribution = .fillEqually
+        
+        mainStackView.addArrangedSubview(statsStackView)
+        statsStackView.translatesAutoresizingMaskIntoConstraints = false
+        statsStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 8).isActive = true
+        statsStackView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -8).isActive = true
     }
     
     private func makeLabel(_ text: String, with color: UIColor) -> UILabel {
@@ -146,9 +153,20 @@ final class PokemonDetailViewController: UIViewController {
         return label
     }
     
-    private func makeProgressView(with color: UIColor) -> UIProgressView {
+    private func makeProgressContentView(text: String, value: Float) -> UIStackView {
+        let label = UILabel(frame: .zero)
+        label.text = text.uppercased()
+        label.font = .systemFont(ofSize: 12)
+        
         let progressView = UIProgressView(progressViewStyle: .bar)
-        progressView.backgroundColor = color
-        return progressView
+        progressView.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+        progressView.progress = value
+        
+        let stackView = UIStackView(arrangedSubviews: [label, progressView])
+        stackView.axis = .horizontal
+        stackView.spacing = 16
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        return stackView
     }
 }
