@@ -114,6 +114,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PokemonListCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
+        cell.clean()
         cell.viewModel = viewModel.getListCellViewModel(at: indexPath)
         return cell
     }

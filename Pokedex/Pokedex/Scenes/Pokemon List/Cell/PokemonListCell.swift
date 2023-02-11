@@ -92,4 +92,10 @@ final class PokemonListCell: UICollectionViewCell {
             self?.title.text = error.localizedDescription
         }
     }
+    
+    func clean() {
+        title.text = nil
+        imageView.image = nil
+        contentView.backgroundColor = .clear
+    }
 }
