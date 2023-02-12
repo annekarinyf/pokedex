@@ -9,8 +9,8 @@ import UIKit
 
 final class PokemonListViewController: UIViewController {
     private enum LayouContants {
-        static let cellInset: CGFloat = 30
-        static let cellSize: CGFloat = 150
+        static let cellInset: CGFloat = 10
+        static let cellSize: CGFloat = 170
     }
     
     private lazy var collectionView: UICollectionView = {

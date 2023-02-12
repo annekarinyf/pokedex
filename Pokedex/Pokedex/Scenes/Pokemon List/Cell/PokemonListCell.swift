@@ -16,8 +16,9 @@ final class PokemonListCell: UICollectionViewCell {
     }
     
     enum LayoutConstants {
-        static let spacing: CGFloat = 12
-        static let fontSize: CGFloat = 20
+        static let spacing: CGFloat = 8
+        static let titleFontSize: CGFloat = 18
+        static let subtitleFontSize: CGFloat = 14
     }
     
     private lazy var imageView: UIImageView = {
@@ -26,9 +27,15 @@ final class PokemonListCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var title: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: LayoutConstants.fontSize)
+        label.font = .boldSystemFont(ofSize: LayoutConstants.titleFontSize)
+        return label
+    }()
+    
+    private lazy var subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: LayoutConstants.subtitleFontSize)
         return label
     }()
     
@@ -49,22 +56,34 @@ final class PokemonListCell: UICollectionViewCell {
     }
     
     private func setupSubviews() {
-        let stackView = UIStackView(arrangedSubviews: [imageView, title])
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                titleLabel,
+                imageView,
+                subtitleLabel
+            ]
+        )
+        addSubview(stackView)
+        
         stackView.spacing = LayoutConstants.spacing
         stackView.alignment = .center
         stackView.axis = .vertical
-        
-        addSubview(stackView)
-        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
+        setupImageView()
         addSubview(activityIndicator)
+        setupActivityIndicator()
+    }
+    
+    private func setupImageView() {
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+    }
+    
+    private func setupActivityIndicator() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -80,8 +99,9 @@ final class PokemonListCell: UICollectionViewCell {
         }
         
         viewModel?.onPokemonDetailLoad = { [weak self] presentableModel in
-            self?.title.text = presentableModel.name
+            self?.titleLabel.text = "\(presentableModel.number) - \(presentableModel.name)"
             self?.contentView.backgroundColor = presentableModel.types.first?.color.withAlphaComponent(0.25)
+            self?.subtitleLabel.text = presentableModel.types.map({ $0.type }).joined(separator: ", ")
         }
         
         viewModel?.onImageLoad = { [weak self] image in
@@ -89,12 +109,12 @@ final class PokemonListCell: UICollectionViewCell {
         }
         
         viewModel?.onErrorState = { [weak self] error in
-            self?.title.text = error.localizedDescription
+            self?.titleLabel.text = error.localizedDescription
         }
     }
     
     func clean() {
-        title.text = nil
+        titleLabel.text = nil
         imageView.image = nil
         contentView.backgroundColor = .clear
     }
