@@ -39,6 +39,7 @@ final class PokemonDetailViewController: UIViewController {
         static let imageViewSize: CGFloat = 150
         static let imageBackgroundViewSize: CGFloat = 200
         static let labelStatsHeight: CGFloat = 16
+        static let sizeInfoLabelWidth: CGFloat = 150
     }
     
     private let viewModel: PokemonDetailViewModel
@@ -90,26 +91,22 @@ final class PokemonDetailViewController: UIViewController {
         view.addSubview(scrollView)
         setupScrollView()
         
+        imageBackgroundView.addSubview(imageView)
+        scrollView.addSubview(imageBackgroundView)
+        setupImageBackground()
+        
         let mainStackView = UIStackView()
         scrollView.addSubview(mainStackView)
         setupMainStackView(mainStackView)
-        
-        imageBackgroundView.addSubview(imageView)
-        mainStackView.addArrangedSubview(imageBackgroundView)
-        setupImageBackground(on: mainStackView)
 
         let typesStackView = setupTypesStackView()
         mainStackView.addArrangedSubview(typesStackView)
-        typesStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: LayoutConstants.spacing).isActive = true
         
         let sizeInfoStackView = setupSizeInfoStackView()
         mainStackView.addArrangedSubview(sizeInfoStackView)
-        sizeInfoStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: LayoutConstants.spacing).isActive = true
         
         let statsStackView = setStatsStackView()
         mainStackView.addArrangedSubview(statsStackView)
-        statsStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: LayoutConstants.spacing).isActive = true
-        statsStackView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -LayoutConstants.spacing).isActive = true
     }
     
     private func setupScrollView() {
@@ -123,18 +120,17 @@ final class PokemonDetailViewController: UIViewController {
     private func setupMainStackView(_ stackView: UIStackView) {
         stackView.axis = .vertical
         stackView.spacing = LayoutConstants.stackSpacing
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         stackView.alignment = .leading
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        stackView.topAnchor.constraint(equalTo: imageBackgroundView.bottomAnchor, constant: LayoutConstants.spacing).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: LayoutConstants.spacing).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: LayoutConstants.spacing).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -LayoutConstants.spacing).isActive = true
     }
     
-    private func setupImageBackground(on stackView: UIStackView) {
+    private func setupImageBackground() {
         imageBackgroundView.backgroundColor = viewModel.backgroundColor
         imageView.image = viewModel.image
         
@@ -146,8 +142,10 @@ final class PokemonDetailViewController: UIViewController {
         
         imageBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         imageBackgroundView.heightAnchor.constraint(equalToConstant: LayoutConstants.imageBackgroundViewSize).isActive = true
-        imageBackgroundView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
-        imageBackgroundView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        imageBackgroundView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        imageBackgroundView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        imageBackgroundView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        imageBackgroundView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
     }
     
     private func setupTypesStackView() -> UIStackView {
@@ -203,7 +201,8 @@ final class PokemonDetailViewController: UIViewController {
         let weightStackView = UIStackView(arrangedSubviews: [weight, weightLabel])
         weightStackView.axis = .horizontal
         weightStackView.spacing = LayoutConstants.spacing
-        weightStackView.alignment = .center
+        weightStackView.alignment = .leading
+        weightStackView.distribution = .fillProportionally
         
         let height = UILabel(frame: .zero)
         height.text = viewModel.heightLabel
@@ -212,18 +211,21 @@ final class PokemonDetailViewController: UIViewController {
         let heightStackView = UIStackView(arrangedSubviews: [height, heightLabel])
         heightStackView.axis = .horizontal
         heightStackView.spacing = LayoutConstants.spacing
-        heightStackView.alignment = .center
+        heightStackView.alignment = .leading
+        heightStackView.distribution = .fillProportionally
         
         let sizeInfoStackView = UIStackView(arrangedSubviews: [weightStackView, heightStackView])
         sizeInfoStackView.spacing = LayoutConstants.spacing
         sizeInfoStackView.axis = .vertical
+        sizeInfoStackView.translatesAutoresizingMaskIntoConstraints = true
+        sizeInfoStackView.widthAnchor.constraint(equalToConstant: LayoutConstants.sizeInfoLabelWidth).isActive = true
         return sizeInfoStackView
     }
     
     private func makeProgressContentView(text: String, value: Int, maxValue: Int) -> UIStackView {
         let label = UILabel(frame: .zero)
         label.text = "\(text.uppercased()) (\(value)/\(maxValue))"
-        label.font = .systemFont(ofSize: LayoutConstants.progressFontSize)
+        label.font = .boldSystemFont(ofSize: LayoutConstants.progressFontSize)
         
         let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.trackTintColor = UIColor.systemBlue.withAlphaComponent(0.15)
