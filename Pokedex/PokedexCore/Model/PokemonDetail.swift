@@ -23,7 +23,7 @@ public struct PokemonDetail {
     }
 }
 
-public enum PokemonType: String {
+public enum PokemonType: String, CaseIterable {
     case grass
     case fire
     case water

@@ -67,9 +67,21 @@ final class PokemonListViewController: UIViewController {
         title = viewModel.title
         view.backgroundColor = .systemBackground
         
+        setupNavigationButton()
         setupSubviews()
         setupBinding()
         viewModel.loadList()
+    }
+    
+    private func setupNavigationButton() {
+        let rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "line.3.horizontal.decrease.circle"),
+            style: .done,
+            target: self,
+            action: #selector(openFilterOptions)
+        )
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+
     }
     
     private func setupSubviews() {
@@ -88,6 +100,37 @@ final class PokemonListViewController: UIViewController {
         viewModel.loadList()
     }
     
+    @objc private func openFilterOptions() {
+        let alertController = UIAlertController(
+            title: "Filter",
+            message: "You can filter Pokémon by type",
+            preferredStyle: .actionSheet
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(cancelAction)
+        
+        let noFilterAction = UIAlertAction(title: "No filter", style: .destructive) { [weak self] _ in
+            self?.viewModel.cancelFilter()
+        }
+        alertController.addAction(noFilterAction)
+        
+        let type = viewModel.getTypes()
+        let actions = type.map { makeAlertAction(with: $0) }
+        actions.forEach { action in
+            alertController.addAction(action)
+        }
+
+        present(alertController, animated: true)
+    }
+    
+    private func makeAlertAction(with title: String) -> UIAlertAction {
+        let action = UIAlertAction(title: title, style: .default) { [weak self] _ in
+            self?.viewModel.filter(with: title)
+        }
+        return action
+    }
+    
     private func setupBinding() {
         viewModel.onLoadingStateChange = { [weak self] isLoading in
             if isLoading {
@@ -104,12 +147,16 @@ final class PokemonListViewController: UIViewController {
         viewModel.onErrorState = { [weak self] error in
             self?.errorLabel.text = error.localizedDescription
         }
+        
+        viewModel.onPokemonFilter = { [weak self] in
+            self?.collectionView.reloadData()
+        }
     }
 }
 
 extension PokemonListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.pokemonListCount
+        viewModel.getListCellViewModelCount()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -127,7 +174,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.pokemonListCount - 1 {
+        if indexPath.row == viewModel.getListCellViewModelCount() - 1 {
             viewModel.loadList()
         }
     }

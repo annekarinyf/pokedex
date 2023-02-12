@@ -15,17 +15,24 @@ final class PokemonListViewModel {
     private var url: URL?
     private var cellViewModels = [PokemonListCellViewModel]()
     
-    var title: String {
-        "Pokedex"
+    private var filterType: PokemonType? {
+        didSet {
+            filteredCellViewModels = cellViewModels.filter { $0.presentableModel?.types.first?.type == filterType?.rawValue }
+        }
+    }
+    private var filteredCellViewModels = [PokemonListCellViewModel]()
+    private var isFiltering: Bool {
+        filterType != nil
     }
     
-    var pokemonListCount: Int {
-        cellViewModels.count
+    var title: String {
+        "Pokedex"
     }
     
     var onLoadingStateChange: Observer<Bool>?
     var onErrorState: Observer<Error>?
     var onPokemonListLoad: (() -> Void)?
+    var onPokemonFilter: (() -> Void)?
     
     init(
         url: URL,
@@ -40,7 +47,7 @@ final class PokemonListViewModel {
     }
     
     func loadList() {
-        guard let url = url else {
+        guard let url = url, !isFiltering else {
             return
         }
         onLoadingStateChange?(true)
@@ -67,10 +74,36 @@ final class PokemonListViewModel {
     }
     
     func getListCellViewModel(at indexPath: IndexPath) -> PokemonListCellViewModel {
-        cellViewModels[indexPath.row]
+        getCellViewModels()[indexPath.row]
     }
     
     func getPresentableModel(at indexPath: IndexPath) -> PokemonDetailPresentableModel? {
-        cellViewModels[indexPath.row].presentableModel
+        getCellViewModels()[indexPath.row].presentableModel
+    }
+    
+    func getListCellViewModelCount() -> Int {
+        getCellViewModels().count
+    }
+    
+    func getTypes() -> [String] {
+        PokemonType.allCases.map { $0.rawValue }
+    }
+    
+    func getCellViewModels() -> [PokemonListCellViewModel] {
+        if isFiltering {
+            return filteredCellViewModels
+        } else {
+            return cellViewModels
+        }
+    }
+    
+    func filter(with type: String) {
+        filterType = PokemonType(rawValue: type) ?? .unknown
+        onPokemonFilter?()
+    }
+    
+    func cancelFilter() {
+        filterType = nil
+        onPokemonFilter?()
     }
 }
