@@ -34,6 +34,8 @@ final class PokemonDetailViewController: UIViewController {
         return label
     }()
     
+    private var statusBarView: UIView?
+    
     init(viewModel: PokemonDetailPresentableModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -49,6 +51,32 @@ final class PokemonDetailViewController: UIViewController {
         title = "\(viewModel.number) - \(viewModel.name)"
         view.backgroundColor = .systemBackground
         setupSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationController(isAppearing: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setupNavigationController(isAppearing: false)
+    }
+    
+    private func setupNavigationController(isAppearing: Bool) {
+        if isAppearing {
+            let color = viewModel.types.first?.color.withAlphaComponent(0.25)
+            navigationController?.navigationBar.backgroundColor = color
+            
+            if let statusBarView = navigationController?.makeStatusBarView(backgroundColor: color) {
+                self.statusBarView = statusBarView
+                navigationController?.view.addSubview(statusBarView)
+            }
+        } else {
+            navigationController?.navigationBar.backgroundColor = .clear
+            statusBarView?.removeFromSuperview()
+            statusBarView = nil
+        }
     }
     
     private func setupSubviews() {
@@ -100,9 +128,7 @@ final class PokemonDetailViewController: UIViewController {
     }
     
     private func setupImageBackground(on stackView: UIStackView) {
-        let color = viewModel.types.first?.color.withAlphaComponent(0.25)
-        navigationController?.navigationBar.backgroundColor = color
-        imageBackgroundView.backgroundColor = color
+        imageBackgroundView.backgroundColor = viewModel.types.first?.color.withAlphaComponent(0.25)
         imageView.image = viewModel.image
         
         imageView.translatesAutoresizingMaskIntoConstraints = false

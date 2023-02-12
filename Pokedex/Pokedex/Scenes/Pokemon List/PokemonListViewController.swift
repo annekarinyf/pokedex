@@ -74,11 +74,6 @@ final class PokemonListViewController: UIViewController {
         viewModel.loadList()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.backgroundColor = .clear
-    }
-    
     private func setupNavigationButton() {
         let rightBarButtonItem = UIBarButtonItem(
             image: viewModel.barButtonImage,

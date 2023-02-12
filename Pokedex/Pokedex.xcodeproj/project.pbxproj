@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF812CD529987E3B004BEC3F /* UINavigationController+StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF812CD429987E3B004BEC3F /* UINavigationController+StatusBar.swift */; };
 		DF96FE062997AB9800C2F28D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF96FE052997AB9800C2F28D /* AppDelegate.swift */; };
 		DF96FE082997AB9800C2F28D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF96FE072997AB9800C2F28D /* SceneDelegate.swift */; };
 		DF96FE0A2997AB9800C2F28D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF96FE092997AB9800C2F28D /* ViewController.swift */; };
@@ -82,6 +83,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DF812CD429987E3B004BEC3F /* UINavigationController+StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+StatusBar.swift"; sourceTree = "<group>"; };
 		DF96FE022997AB9800C2F28D /* Pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF96FE052997AB9800C2F28D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF96FE072997AB9800C2F28D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				DF96FE6D2997D79100C2F28D /* Float+UnitFormatting.swift */,
 				DF96FE6F2997D7BC00C2F28D /* PokemonType+Color.swift */,
 				DF96FE752997DB8600C2F28D /* PokemonDetail+PresentableModel.swift */,
+				DF812CD429987E3B004BEC3F /* UINavigationController+StatusBar.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				DF96FE0A2997AB9800C2F28D /* ViewController.swift in Sources */,
 				DF96FE062997AB9800C2F28D /* AppDelegate.swift in Sources */,
 				DF96FE5C2997CA2200C2F28D /* PokemonListViewController.swift in Sources */,
+				DF812CD529987E3B004BEC3F /* UINavigationController+StatusBar.swift in Sources */,
 				DF96FE5E2997CA4200C2F28D /* PokemonListViewModel.swift in Sources */,
 				DF96FE082997AB9800C2F28D /* SceneDelegate.swift in Sources */,
 				DF96FE6E2997D79100C2F28D /* Float+UnitFormatting.swift in Sources */,
