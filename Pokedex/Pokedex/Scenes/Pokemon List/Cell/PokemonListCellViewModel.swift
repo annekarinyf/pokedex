@@ -16,8 +16,28 @@ final class PokemonListCellViewModel {
     var onLoadingStateChange: Observer<Bool>?
     var onImageLoad: Observer<UIImage?>?
     var onErrorState: Observer<Error>?
-    var onPokemonDetailLoad: Observer<PokemonDetailPresentableModel>?
-    var presentableModel: PokemonDetailPresentableModel?
+    var onPokemonDetailLoad: (() -> Void)?
+    private (set) var presentableModel: PokemonDetailPresentableModel?
+    
+    var title: String? {
+        if let model = presentableModel {
+            return "\(model.number) - \(model.name)"
+        } else {
+            return nil
+        }
+    }
+    
+    var backgroundColor: UIColor? {
+        presentableModel?.types.first?.color.withAlphaComponent(0.25)
+    }
+    
+    var subtitle: String? {
+        if let model = presentableModel {
+            return model.types.map({ $0.type }).joined(separator: ", ")
+        } else {
+            return nil
+        }
+    }
     
     init(
         loader: PokemonDetailLoader,
@@ -37,7 +57,7 @@ final class PokemonListCellViewModel {
             case .success(let pokemonDetail):
                 let model = pokemonDetail.toPresentableModel()
                 self?.presentableModel = model
-                self?.onPokemonDetailLoad?(model)
+                self?.onPokemonDetailLoad?()
                 self?.loadImage(with: pokemonDetail.spriteURL)
             case .failure(let error):
                 self?.onErrorState?(error)

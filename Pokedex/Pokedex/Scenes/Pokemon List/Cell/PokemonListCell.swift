@@ -98,10 +98,10 @@ final class PokemonListCell: UICollectionViewCell {
             }
         }
         
-        viewModel?.onPokemonDetailLoad = { [weak self] presentableModel in
-            self?.titleLabel.text = "\(presentableModel.number) - \(presentableModel.name)"
-            self?.contentView.backgroundColor = presentableModel.types.first?.color.withAlphaComponent(0.25)
-            self?.subtitleLabel.text = presentableModel.types.map({ $0.type }).joined(separator: ", ")
+        viewModel?.onPokemonDetailLoad = { [weak self] in
+            self?.titleLabel.text = self?.viewModel?.title
+            self?.contentView.backgroundColor = self?.viewModel?.backgroundColor
+            self?.subtitleLabel.text = self?.viewModel?.subtitle
         }
         
         viewModel?.onImageLoad = { [weak self] image in
