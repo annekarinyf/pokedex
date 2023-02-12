@@ -29,6 +29,10 @@ final class PokemonListViewModel {
         "Pokedex"
     }
     
+    var barButtonImage: UIImage? {
+        UIImage(systemName: "line.3.horizontal.decrease.circle")
+    }
+    
     var onLoadingStateChange: Observer<Bool>?
     var onErrorState: Observer<Error>?
     var onPokemonListLoad: (() -> Void)?

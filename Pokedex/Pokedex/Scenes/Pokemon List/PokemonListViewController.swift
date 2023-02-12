@@ -56,6 +56,7 @@ final class PokemonListViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -73,9 +74,14 @@ final class PokemonListViewController: UIViewController {
         viewModel.loadList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.backgroundColor = .clear
+    }
+    
     private func setupNavigationButton() {
         let rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "line.3.horizontal.decrease.circle"),
+            image: viewModel.barButtonImage,
             style: .done,
             target: self,
             action: #selector(openFilterOptions)
