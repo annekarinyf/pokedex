@@ -51,7 +51,8 @@ final class MainCoordinator: Coordinator {
 
 extension MainCoordinator: PokemonListCoordinator {
     func openPokemonDetailViewController(with model: PokemonDetailPresentableModel) {
-        let viewController = PokemonDetailViewController(viewModel: model)
+        let viewModel = PokemonDetailViewModel(presentableModel: model)
+        let viewController = PokemonDetailViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
 }

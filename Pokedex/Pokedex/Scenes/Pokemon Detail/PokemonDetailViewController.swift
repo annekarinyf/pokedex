@@ -8,7 +8,7 @@
 import UIKit
 
 final class PokemonDetailViewController: UIViewController {
-    private let viewModel: PokemonDetailPresentableModel
+    private let viewModel: PokemonDetailViewModel
     private let scrollView = UIScrollView()
     
     private lazy var imageBackgroundView: UIView = {
@@ -36,7 +36,7 @@ final class PokemonDetailViewController: UIViewController {
     
     private var statusBarView: UIView?
     
-    init(viewModel: PokemonDetailPresentableModel) {
+    init(viewModel: PokemonDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,7 +48,7 @@ final class PokemonDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "\(viewModel.number) - \(viewModel.name)"
+        title = viewModel.title
         view.backgroundColor = .systemBackground
         setupSubviews()
     }
@@ -65,7 +65,7 @@ final class PokemonDetailViewController: UIViewController {
     
     private func setupNavigationController(isAppearing: Bool) {
         if isAppearing {
-            let color = viewModel.types.first?.color.withAlphaComponent(0.25)
+            let color = viewModel.backgroundColor
             navigationController?.navigationBar.backgroundColor = color
             
             if let statusBarView = navigationController?.makeStatusBarView(backgroundColor: color) {
@@ -128,7 +128,7 @@ final class PokemonDetailViewController: UIViewController {
     }
     
     private func setupImageBackground(on stackView: UIStackView) {
-        imageBackgroundView.backgroundColor = viewModel.types.first?.color.withAlphaComponent(0.25)
+        imageBackgroundView.backgroundColor = viewModel.backgroundColor
         imageView.image = viewModel.image
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -153,12 +153,23 @@ final class PokemonDetailViewController: UIViewController {
     
     private func setStatsStackView() -> UIStackView {
         let baseStats = UILabel(frame: .zero)
-        baseStats.text = "Base Stats"
+        baseStats.text = viewModel.baseStats
         baseStats.font = .boldSystemFont(ofSize: 18)
         
-        var stats = viewModel.stats.map { makeProgressContentView(text: $0.stat, value: $0.value, maxValue: 300) }
+        var stats = viewModel.stats.map {
+            makeProgressContentView(
+                text: $0.stat,
+                value: $0.value,
+                maxValue: viewModel.maxStatValue
+            )
+        }
         
-        let baseExpStat = makeProgressContentView(text: "exp", value: viewModel.baseExperience, maxValue: 1000)
+        let baseExpStat = makeProgressContentView(
+            text: viewModel.baseExp,
+            value: viewModel.baseExperience,
+            maxValue: viewModel.maxExpValue
+        )
+        
         stats.append(baseExpStat)
         
         let statsStackView = UIStackView(arrangedSubviews: [baseStats] + stats)
