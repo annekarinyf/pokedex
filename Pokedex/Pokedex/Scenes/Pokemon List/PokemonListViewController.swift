@@ -81,7 +81,7 @@ final class PokemonListViewController: UIViewController {
             action: #selector(openFilterOptions)
         )
         navigationItem.rightBarButtonItem = rightBarButtonItem
-
+        
     }
     
     private func setupSubviews() {
@@ -120,7 +120,7 @@ final class PokemonListViewController: UIViewController {
         actions.forEach { action in
             alertController.addAction(action)
         }
-
+        
         present(alertController, animated: true)
     }
     
