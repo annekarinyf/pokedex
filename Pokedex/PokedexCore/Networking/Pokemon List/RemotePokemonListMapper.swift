@@ -26,13 +26,10 @@ public struct RemotePokemonListMapper {
 // MARK: Decodable Models
 private extension RemotePokemonListMapper {
     struct Root: Decodable {
-        let count: Int
         let next: URL?
-        let previous: URL?
         let results: [DecodablePokemonItem]
         
         struct DecodablePokemonItem: Decodable {
-            let name: String
             let url: URL
         }
     }
