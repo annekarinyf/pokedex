@@ -186,10 +186,10 @@ final class PokemonDetailViewController: UIViewController {
     
     private func makeLabel(_ text: String, with color: UIColor) -> UILabel {
         let label = UILabel()
-        label.font = .systemFont(ofSize: LayoutConstants.fontSize)
+        label.font = .boldSystemFont(ofSize: LayoutConstants.fontSize)
         label.text = text
-        label.tintColor = .label
-        label.backgroundColor = color.withAlphaComponent(0.25)
+        label.textColor = color
+        label.backgroundColor = color.withAlphaComponent(0.1)
         return label
     }
     
