@@ -8,7 +8,7 @@
 import UIKit
 
 final class PokemonListViewController: UIViewController {
-    private enum LayouContants {
+    private enum LayoutConstants {
         static let cellInset: CGFloat = 10
         static let cellSize: CGFloat = 170
     }
@@ -16,14 +16,14 @@ final class PokemonListViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(
-            top: LayouContants.cellInset,
-            left: LayouContants.cellInset,
-            bottom: LayouContants.cellInset,
-            right: LayouContants.cellInset
+            top: LayoutConstants.cellInset,
+            left: LayoutConstants.cellInset,
+            bottom: LayoutConstants.cellInset,
+            right: LayoutConstants.cellInset
         )
         layout.itemSize = CGSize(
-            width: LayouContants.cellSize,
-            height: LayouContants.cellSize
+            width: getCellSize(),
+            height: getCellSize()
         )
         let collectionView = UICollectionView(
             frame: .zero,
@@ -152,6 +152,10 @@ final class PokemonListViewController: UIViewController {
         viewModel.onPokemonFilter = { [weak self] in
             self?.collectionView.reloadData()
         }
+    }
+    
+    private func getCellSize() -> CGFloat {
+        (view.frame.width/2) - (2*LayoutConstants.cellInset)
     }
 }
 
