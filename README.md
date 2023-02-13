@@ -1,5 +1,5 @@
 # Pokédex App
-This app shows a list and details of Pokémons.
+This app shows a list and details of Pokémons using [Poké API](https://pokeapi.co/docs/v2).
 
 ## Architecture and UI Design Patterns
 - On this project's architecture, we have 2 targets following Clean Architecture principles:
